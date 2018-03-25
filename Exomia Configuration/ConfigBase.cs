@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Exomia.Configuration
 {
-    /// <summary>
-    ///     implements <see cref="IConfig" /> interface.
-    /// </summary>
+    /// <inheritdoc />
     public abstract class ConfigBase : IConfig
     {
+        private static readonly Regex s_r1;
         private readonly Dictionary<string, ValueCommentPair> _vcPairs;
 
         /// <summary>
@@ -27,10 +27,15 @@ namespace Exomia.Configuration
         /// </summary>
         protected string _name;
 
+        static ConfigBase()
+        {
+            s_r1 = new Regex(@"\${(.+?)(?:\.(.+?))?\}");
+        }
+
         /// <summary>
         ///     ConfigBase constructor
         /// </summary>
-        public ConfigBase(IConfigSource configSource, string name, string comment = "")
+        protected ConfigBase(IConfigSource configSource, string name, string comment = "")
         {
             _name = name;
             _configSource = configSource;
@@ -39,86 +44,66 @@ namespace Exomia.Configuration
             _vcPairs = new Dictionary<string, ValueCommentPair>();
         }
 
-        internal Dictionary<string, ValueCommentPair> VCPairs
+        internal Dictionary<string, ValueCommentPair> VcPairs
         {
             get { return _vcPairs; }
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.KeySet" />
-        /// </summary>
+        /// <inheritdoc />
         public event ConfigKeyEventHandler KeySet;
 
-        /// <summary>
-        ///     <see cref="IConfig.KeyRemoved" />
-        /// </summary>
+        /// <inheritdoc />
         public event ConfigKeyEventHandler KeyRemoved;
 
-        /// <summary>
-        ///     IConfigSource
-        /// </summary>
+        /// <inheritdoc />
         public IConfigSource ConfigSource
         {
             get { return _configSource; }
         }
 
-        /// <summary>
-        ///     string
-        /// </summary>
+        /// <inheritdoc />
         public string Name
         {
             get { return _name; }
         }
 
-        /// <summary>
-        ///     string
-        /// </summary>
+        /// <inheritdoc />
         public string Comment
         {
             get { return _comment; }
             set { _comment = value; }
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.Keys" />
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<string> Keys
         {
             get { return _vcPairs.Keys; }
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.Keys" />
-        /// </summary>
+        /// <inheritdoc />
         public bool Contains(string key)
         {
             return _vcPairs.ContainsKey(key);
         }
 
-        /// <summary>
-        ///     <see cref="IConfig" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual string this[string key]
         {
             get { return _vcPairs[key].Value; }
             set { Set(key, value); }
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.Set{T}(string, T, string)" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual void Set<T>(string key, T value, string comment = "") where T : IConvertible
         {
-            ValueCommentPair buffer = new ValueCommentPair(value.ToString(), comment);
+            ValueCommentPair buffer = new ValueCommentPair(value.ToString(CultureInfo.InvariantCulture), comment);
             _vcPairs[key] = buffer;
 
             OnKeySet(this, key, buffer.Value, buffer.Comment);
             KeySet?.Invoke(this, key, buffer.Value, buffer.Comment);
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.TrySet{T}(string, T, string)" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual bool TrySet<T>(string key, T value, string comment = "") where T : IConvertible
         {
             if (_vcPairs.ContainsKey(key)) { return false; }
@@ -126,22 +111,17 @@ namespace Exomia.Configuration
             return true;
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.SetExpanded(string, string, string, string[])" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual void SetExpanded(string key, string format, string comment, params string[] keys)
         {
             if (comment == null)
             {
                 comment = string.Empty;
             }
-
-            Set(key, string.Format(format, keys.Select(x => "${" + x + "}").ToArray()), comment);
+            Set(key, string.Format(format, keys.Select(x => (object)$"${{{x}}}").ToArray()), comment);
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.TrySetExpanded(string, string, string, string[])" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual bool TrySetExpanded(string key, string format, string comment, params string[] keys)
         {
             if (comment == null)
@@ -152,9 +132,7 @@ namespace Exomia.Configuration
             return TrySet(key, string.Format(format, keys.Select(x => "${" + x + "}").ToArray()), comment);
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.Get{T}(string)" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual T Get<T>(string key) where T : IConvertible
         {
             Type type = typeof(T);
@@ -163,9 +141,7 @@ namespace Exomia.Configuration
             return (T)Convert.ChangeType(_vcPairs[key].Value, type);
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.GetExpanded{T}(string)" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual T GetExpanded<T>(string key) where T : IConvertible
         {
             Type type = typeof(T);
@@ -174,9 +150,7 @@ namespace Exomia.Configuration
             return (T)Convert.ChangeType(ExpandValue(_vcPairs[key].Value), type);
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.TryGet{T}(string, out T)" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual bool TryGet<T>(string key, out T outValue) where T : IConvertible
         {
             outValue = default(T);
@@ -191,9 +165,7 @@ namespace Exomia.Configuration
             catch { return false; }
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.TryGetExpanded{T}(string, out T)" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual bool TryGetExpanded<T>(string key, out T outValue) where T : IConvertible
         {
             outValue = default(T);
@@ -208,9 +180,7 @@ namespace Exomia.Configuration
             catch { return false; }
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.Remove(string)" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual bool Remove(string key)
         {
             ValueCommentPair buffer = _vcPairs[key];
@@ -224,14 +194,10 @@ namespace Exomia.Configuration
             return false;
         }
 
-        /// <summary>
-        ///     <see cref="IConfig.TryRemove(string)" />
-        /// </summary>
+        /// <inheritdoc />
         public virtual bool TryRemove(string key)
         {
-            if (_vcPairs.ContainsKey(key)) { return false; }
-
-            return Remove(key);
+            return !_vcPairs.ContainsKey(key) && Remove(key);
         }
 
         /// <summary>
@@ -239,8 +205,8 @@ namespace Exomia.Configuration
         /// </summary>
         protected string ExpandValue(string value)
         {
-            Match match = null;
-            while ((match = Regex.Match(value, @"\${(.+?)(?:\.(.+?))?\}")).Success)
+            Match match;
+            while ((match = s_r1.Match(value)).Success)
             {
                 if (match.Groups[2].Success && match.Groups[1].Success)
                 {

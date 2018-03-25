@@ -57,7 +57,7 @@ namespace Exomia.Configuration.Ini
                         $"[{cfg.Name}]" + (string.IsNullOrEmpty(cfg.Comment)
                             ? ""
                             : $" {IniParser.ESCAPE_COMMENT}{cfg.Comment}"));
-                    foreach (KeyValuePair<string, ValueCommentPair> item in cfg.VCPairs)
+                    foreach (KeyValuePair<string, ValueCommentPair> item in cfg.VcPairs)
                     {
                         ValueCommentPair pair = item.Value;
 

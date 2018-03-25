@@ -95,11 +95,11 @@ namespace Exomia.Configuration.Argv
 
                 if (GetKeyValueCommentFromArgv(buffer, out string key, out string value, out comment))
                 {
-                    config.VCPairs.Add(key, new ValueCommentPair(value, comment));
+                    config.VcPairs.Add(key, new ValueCommentPair(value, comment));
                 }
                 else
                 {
-                    config.VCPairs.Add(i.ToString(), new ValueCommentPair(buffer, string.Empty));
+                    config.VcPairs.Add(i.ToString(), new ValueCommentPair(buffer, string.Empty));
                 }
             }
         }

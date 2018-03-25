@@ -134,14 +134,10 @@ namespace Exomia.Configuration.Xml
                                         }
                                     }
                                     break;
-                                default:
-                                    break;
                             }
                             break;
                         case XmlNodeType.Comment:
                             infos.Add(reader.Value);
-                            break;
-                        default:
                             break;
                     }
                 }

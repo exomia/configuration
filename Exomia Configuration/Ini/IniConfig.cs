@@ -27,7 +27,7 @@ namespace Exomia.Configuration.Ini
 
         internal void AddKeyInternal(string key, string value, string comment, string[] infos = null)
         {
-            VCPairs.Add(key, new ValueCommentPair(value, comment));
+            Set(key, value, comment);
             if (infos != null)
             {
                 _keyInfos.Add(key, infos);

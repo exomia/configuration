@@ -2,9 +2,7 @@
 
 namespace Exomia.Configuration.Xml
 {
-    /// <summary>
-    ///     implements <see cref="ConfigBase" /> base class.
-    /// </summary>
+    /// <inheritdoc />
     public sealed class XmlConfig : ConfigBase
     {
         private readonly Dictionary<string, string[]> _keyInfos;
@@ -29,7 +27,7 @@ namespace Exomia.Configuration.Xml
 
         internal void AddKeyInternal(string key, string value, string comment, string[] infos = null)
         {
-            VCPairs.Add(key, new ValueCommentPair(value, comment));
+            Set(key, value, comment);
             if (infos != null)
             {
                 _keyInfos.Add(key, infos);

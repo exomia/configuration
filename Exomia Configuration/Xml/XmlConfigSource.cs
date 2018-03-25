@@ -60,7 +60,7 @@ namespace Exomia.Configuration.Xml
                 }
                 XmlNode section = CreateSectionNode(doc, cfg.Name, cfg.Comment);
                 root.AppendChild(section);
-                foreach (KeyValuePair<string, ValueCommentPair> item in cfg.VCPairs)
+                foreach (KeyValuePair<string, ValueCommentPair> item in cfg.VcPairs)
                 {
                     ValueCommentPair pair = item.Value;
                     XmlNode kvc = CreateKvcNode(doc, item.Key, pair.Value, pair.Comment);

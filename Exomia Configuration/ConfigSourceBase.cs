@@ -18,6 +18,7 @@ namespace Exomia.Configuration
 
         /// <inheritdoc />
         public event ConfigSourceEventHandler Reloaded;
+
         /// <inheritdoc />
         public event ConfigSourceEventHandler Saved;
 
