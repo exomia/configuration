@@ -20,7 +20,7 @@ namespace Exomia.Configuration.Xml
         }
 
         /// <inheritdoc />
-        protected override IConfig CreateConfig(string section, string comment = "")
+        protected override IConfig CreateConfig(string section, string comment)
         {
             return new XmlConfig(this, section, comment);
         }

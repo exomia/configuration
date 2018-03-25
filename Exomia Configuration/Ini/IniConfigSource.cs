@@ -54,9 +54,7 @@ namespace Exomia.Configuration.Ini
                         }
                     }
                     sw.WriteLine(
-                        $"[{cfg.Name}]" + (string.IsNullOrEmpty(cfg.Comment)
-                            ? ""
-                            : $" {IniParser.ESCAPE_COMMENT}{cfg.Comment}"));
+                        $"[{cfg.Name}]{(string.IsNullOrEmpty(cfg.Comment) ? "" : $" {IniParser.ESCAPE_COMMENT}{cfg.Comment}")}");
                     foreach (KeyValuePair<string, ValueCommentPair> item in cfg.VcPairs)
                     {
                         ValueCommentPair pair = item.Value;
@@ -69,8 +67,7 @@ namespace Exomia.Configuration.Ini
                             }
                         }
                         sw.WriteLine(
-                            $"{item.Key} = " + (pair.Value.Contains(";") ? $"\"{pair.Value}\"" : $"{pair.Value}") +
-                            (string.IsNullOrEmpty(pair.Comment) ? "" : $" ;{pair.Comment}"));
+                            $"{item.Key} = {(pair.Value.Contains(";") ? $"\"{pair.Value}\"" : $"{pair.Value}")}{(string.IsNullOrEmpty(pair.Comment) ? "" : $" ;{pair.Comment}")}");
                     }
                     sw.WriteLine();
                 }

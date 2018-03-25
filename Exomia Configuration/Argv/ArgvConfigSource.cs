@@ -6,7 +6,7 @@ namespace Exomia.Configuration.Argv
     public sealed class ArgvConfigSource : ConfigSourceBase
     {
         /// <inheritdoc />
-        protected override IConfig CreateConfig(string section, string comment = "")
+        protected override IConfig CreateConfig(string section, string comment)
         {
             return new ArgvConfig(this, section, comment);
         }
