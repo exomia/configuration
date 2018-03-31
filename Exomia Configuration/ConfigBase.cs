@@ -1,4 +1,28 @@
-﻿using System;
+﻿#region MIT License
+
+// Copyright (c) 2018 exomia - Daniel Bätz
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,6 +33,8 @@ namespace Exomia.Configuration
     /// <inheritdoc />
     public abstract class ConfigBase : IConfig
     {
+        #region Variables
+
         private static readonly Regex s_r1;
         private readonly Dictionary<string, ValueCommentPair> _vcPairs;
 
@@ -27,33 +53,14 @@ namespace Exomia.Configuration
         /// </summary>
         protected string _name;
 
-        static ConfigBase()
-        {
-            s_r1 = new Regex(@"\${(.+?)(?:\.(.+?))?\}");
-        }
+        #endregion
 
-        /// <summary>
-        ///     ConfigBase constructor
-        /// </summary>
-        protected ConfigBase(IConfigSource configSource, string name, string comment = "")
-        {
-            _name = name;
-            _configSource = configSource;
-            _comment = comment;
-
-            _vcPairs = new Dictionary<string, ValueCommentPair>();
-        }
+        #region Properties
 
         internal Dictionary<string, ValueCommentPair> VcPairs
         {
             get { return _vcPairs; }
         }
-
-        /// <inheritdoc />
-        public event ConfigKeyEventHandler KeySet;
-
-        /// <inheritdoc />
-        public event ConfigKeyEventHandler KeyRemoved;
 
         /// <inheritdoc />
         public IConfigSource ConfigSource
@@ -81,16 +88,47 @@ namespace Exomia.Configuration
         }
 
         /// <inheritdoc />
-        public bool Contains(string key)
-        {
-            return _vcPairs.ContainsKey(key);
-        }
-
-        /// <inheritdoc />
         public virtual string this[string key]
         {
             get { return _vcPairs[key].Value; }
             set { Set(key, value); }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        static ConfigBase()
+        {
+            s_r1 = new Regex(@"\${(.+?)(?:\.(.+?))?\}");
+        }
+
+        /// <summary>
+        ///     ConfigBase constructor
+        /// </summary>
+        protected ConfigBase(IConfigSource configSource, string name, string comment = "")
+        {
+            _name = name;
+            _configSource = configSource;
+            _comment = comment;
+
+            _vcPairs = new Dictionary<string, ValueCommentPair>();
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <inheritdoc />
+        public event ConfigKeyEventHandler KeySet;
+
+        /// <inheritdoc />
+        public event ConfigKeyEventHandler KeyRemoved;
+
+        /// <inheritdoc />
+        public bool Contains(string key)
+        {
+            return _vcPairs.ContainsKey(key);
         }
 
         /// <inheritdoc />
@@ -201,6 +239,16 @@ namespace Exomia.Configuration
         }
 
         /// <summary>
+        ///     shows the IConfig info
+        ///     format: [name] ;comment
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"[{_name}]" + (string.IsNullOrEmpty(_comment) ? string.Empty : $" ;{_comment}");
+        }
+
+        /// <summary>
         ///     ExpandValue
         /// </summary>
         protected string ExpandValue(string value)
@@ -239,14 +287,6 @@ namespace Exomia.Configuration
         /// <param name="comment">old comment</param>
         protected virtual void OnKeyRemove(IConfig sender, string key, string value, string comment) { }
 
-        /// <summary>
-        ///     shows the IConfig info
-        ///     format: [name] ;comment
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return $"[{_name}]" + (string.IsNullOrEmpty(_comment) ? string.Empty : $" ;{_comment}");
-        }
+        #endregion
     }
 }

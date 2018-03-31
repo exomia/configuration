@@ -1,4 +1,28 @@
-﻿using System;
+﻿#region MIT License
+
+// Copyright (c) 2018 exomia - Daniel Bätz
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#endregion
+
+using System;
 using System.Collections.Generic;
 
 namespace Exomia.Configuration
@@ -17,6 +41,8 @@ namespace Exomia.Configuration
     /// </summary>
     public interface IConfig
     {
+        #region Properties
+
         /// <summary>
         ///     return the IConfigSource parent
         /// </summary>
@@ -44,6 +70,10 @@ namespace Exomia.Configuration
         ///     get all keys in the config
         /// </summary>
         IEnumerable<string> Keys { get; }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         ///     called than the IConfig set a key
@@ -154,6 +184,8 @@ namespace Exomia.Configuration
         /// <param name="key">key</param>
         /// <returns><b>true</b> if successfully removed; <b>false otherwise</b></returns>
         bool TryRemove(string key);
+
+        #endregion
     }
 
     internal struct ValueCommentPair

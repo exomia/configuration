@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright © 2018 exomia</copyright>
+    <copyright>$copyright$</copyright>
     <tags>exomia configuration</tags>
   </metadata>
 </package>

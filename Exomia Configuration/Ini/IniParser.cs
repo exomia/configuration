@@ -1,4 +1,28 @@
-﻿using System;
+﻿#region MIT License
+
+// Copyright (c) 2018 exomia - Daniel Bätz
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -10,10 +34,16 @@ namespace Exomia.Configuration.Ini
     /// </summary>
     public static class IniParser
     {
+        #region Variables
+
         internal const string ESCAPE_COMMENT = ";";
 
         private static readonly Regex s_r1;
         private static readonly Regex s_r2;
+
+        #endregion
+
+        #region Constructors
 
         static IniParser()
         {
@@ -23,55 +53,9 @@ namespace Exomia.Configuration.Ini
             s_r2 = new Regex($"^\\[(.+)\\]\\s*(?:{ESCAPE_COMMENT}(.+))?");
         }
 
-        private static bool GetSection(string line, out string section, out string comment)
-        {
-            Match match = s_r2.Match(line);
-            if (!match.Success)
-            {
-                throw new Exception("the section is not valid");
-            }
+        #endregion
 
-            section = match.Groups[1].ToString().Trim('\r', '\n', ' ');
-            comment = match.Groups[2].ToString().Trim('\r', '\n', ' ');
-            return true;
-        }
-
-        private static bool GetKeyValueCommentFromLine(string line, out string key, out string value,
-            out string comment)
-        {
-            key = string.Empty;
-            value = string.Empty;
-            comment = string.Empty;
-
-            Match match = s_r1.Match(line);
-            if (!match.Success)
-            {
-                return false;
-            }
-
-            key = match.Groups[1].ToString().Trim('\r', '\n', ' ');
-            if (match.Groups[2].Success)
-            {
-                value = match.Groups[2].ToString().Trim('\r', '\n', ' ');
-                if (match.Groups[3].Success)
-                {
-                    comment = match.Groups[3].ToString().Trim('\r', '\n', ' ');
-                }
-                return true;
-            }
-
-            if (match.Groups[4].Success)
-            {
-                value = match.Groups[4].ToString().Trim('\r', '\n', ' ');
-                if (match.Groups[5].Success)
-                {
-                    comment = match.Groups[5].ToString().Trim('\r', '\n', ' ');
-                }
-                return true;
-            }
-
-            return false;
-        }
+        #region Methods
 
         /// <summary>
         ///     parse a ini file to a IniConfigSource
@@ -92,17 +76,6 @@ namespace Exomia.Configuration.Ini
         public static IniConfigSource Parse(Stream stream, string fileName = "")
         {
             return Parse(stream, null, fileName);
-        }
-
-        internal static IniConfigSource Parse(Stream stream, IniConfigSource source = null, string fileName = "")
-        {
-            if (source == null)
-            {
-                source = new IniConfigSource
-                    { SaveFileName = fileName };
-            }
-            Merge(stream, source);
-            return source;
         }
 
         /// <summary>
@@ -161,5 +134,68 @@ namespace Exomia.Configuration.Ini
                 }
             }
         }
+
+        internal static IniConfigSource Parse(Stream stream, IniConfigSource source = null, string fileName = "")
+        {
+            if (source == null)
+            {
+                source = new IniConfigSource
+                    { SaveFileName = fileName };
+            }
+            Merge(stream, source);
+            return source;
+        }
+
+        private static bool GetSection(string line, out string section, out string comment)
+        {
+            Match match = s_r2.Match(line);
+            if (!match.Success)
+            {
+                throw new Exception("the section is not valid");
+            }
+
+            section = match.Groups[1].ToString().Trim('\r', '\n', ' ');
+            comment = match.Groups[2].ToString().Trim('\r', '\n', ' ');
+            return true;
+        }
+
+        private static bool GetKeyValueCommentFromLine(string line, out string key, out string value,
+            out string comment)
+        {
+            key = string.Empty;
+            value = string.Empty;
+            comment = string.Empty;
+
+            Match match = s_r1.Match(line);
+            if (!match.Success)
+            {
+                return false;
+            }
+
+            key = match.Groups[1].ToString().Trim('\r', '\n', ' ');
+            if (match.Groups[2].Success)
+            {
+                value = match.Groups[2].ToString().Trim('\r', '\n', ' ');
+                if (match.Groups[3].Success)
+                {
+                    comment = match.Groups[3].ToString().Trim('\r', '\n', ' ');
+                }
+                return true;
+            }
+
+            if (match.Groups[4].Success)
+            {
+                value = match.Groups[4].ToString().Trim('\r', '\n', ' ');
+                if (match.Groups[5].Success)
+                {
+                    comment = match.Groups[5].ToString().Trim('\r', '\n', ' ');
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
     }
 }

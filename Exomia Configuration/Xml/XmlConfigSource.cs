@@ -1,4 +1,28 @@
-﻿using System.Collections.Generic;
+﻿#region MIT License
+
+// Copyright (c) 2018 exomia - Daniel Bätz
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#endregion
+
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -8,7 +32,13 @@ namespace Exomia.Configuration.Xml
     /// <inheritdoc />
     public sealed class XmlConfigSource : ConfigSourceBase
     {
+        #region Variables
+
         private string _saveFileName = string.Empty;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         ///     SaveFileName
@@ -17,6 +47,49 @@ namespace Exomia.Configuration.Xml
         {
             get { return _saveFileName; }
             set { _saveFileName = value; }
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static XmlNode CreateSectionNode(XmlDocument doc, string section, string comment = "")
+        {
+            XmlNode node = doc.CreateElement("section");
+
+            XmlAttribute sectionAttr = doc.CreateAttribute("name");
+            sectionAttr.Value = section;
+            node.Attributes?.Append(sectionAttr);
+
+            if (!string.IsNullOrEmpty(comment))
+            {
+                XmlAttribute commentAttr = doc.CreateAttribute("comment");
+                commentAttr.Value = comment;
+                node.Attributes?.Append(commentAttr);
+            }
+
+            return node;
+        }
+
+        private static XmlNode CreateKvcNode(XmlDocument doc, string key, string value, string comment = "")
+        {
+            XmlNode node = doc.CreateElement("item");
+
+            XmlAttribute keyAttr = doc.CreateAttribute("key");
+            keyAttr.Value = key;
+            node.Attributes.Append(keyAttr);
+
+            XmlAttribute valueAttr = doc.CreateAttribute("value");
+            valueAttr.Value = value;
+            node.Attributes.Append(valueAttr);
+
+            if (!string.IsNullOrEmpty(comment))
+            {
+                XmlAttribute commentAttr = doc.CreateAttribute("comment");
+                commentAttr.Value = comment;
+                node.Attributes.Append(commentAttr);
+            }
+            return node;
         }
 
         /// <inheritdoc />
@@ -85,43 +158,6 @@ namespace Exomia.Configuration.Xml
             }
         }
 
-        private static XmlNode CreateSectionNode(XmlDocument doc, string section, string comment = "")
-        {
-            XmlNode node = doc.CreateElement("section");
-
-            XmlAttribute sectionAttr = doc.CreateAttribute("name");
-            sectionAttr.Value = section;
-            node.Attributes?.Append(sectionAttr);
-
-            if (!string.IsNullOrEmpty(comment))
-            {
-                XmlAttribute commentAttr = doc.CreateAttribute("comment");
-                commentAttr.Value = comment;
-                node.Attributes?.Append(commentAttr);
-            }
-
-            return node;
-        }
-
-        private static XmlNode CreateKvcNode(XmlDocument doc, string key, string value, string comment = "")
-        {
-            XmlNode node = doc.CreateElement("item");
-
-            XmlAttribute keyAttr = doc.CreateAttribute("key");
-            keyAttr.Value = key;
-            node.Attributes.Append(keyAttr);
-
-            XmlAttribute valueAttr = doc.CreateAttribute("value");
-            valueAttr.Value = value;
-            node.Attributes.Append(valueAttr);
-
-            if (!string.IsNullOrEmpty(comment))
-            {
-                XmlAttribute commentAttr = doc.CreateAttribute("comment");
-                commentAttr.Value = comment;
-                node.Attributes.Append(commentAttr);
-            }
-            return node;
-        }
+        #endregion
     }
 }
