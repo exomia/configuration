@@ -167,7 +167,7 @@ namespace Exomia.Configuration
                 comment = string.Empty;
             }
 
-            return TrySet(key, string.Format(format, keys.Select(x => "${" + x + "}").ToArray()), comment);
+            return TrySet(key, string.Format(format, keys.Select(x => (object)$"${{{x}}}").ToArray()), comment);
         }
 
         /// <inheritdoc />
