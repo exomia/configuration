@@ -1,6 +1,6 @@
 ## Information
 
-exomia/serialization is build for a fast serialization from and to a byte array & more
+exomia/configuration supports loading of ini, xml configuration files & command line configurations
 
 ## Example
 
