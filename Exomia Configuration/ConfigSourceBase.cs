@@ -31,6 +31,12 @@ namespace Exomia.Configuration
     {
         #region Variables
 
+        /// <inheritdoc />
+        public event ConfigSourceEventHandler Reloaded;
+
+        /// <inheritdoc />
+        public event ConfigSourceEventHandler Saved;
+
         /// <summary>
         ///     Dictionary string, IConfig
         /// </summary>
@@ -59,12 +65,6 @@ namespace Exomia.Configuration
         #endregion
 
         #region Methods
-
-        /// <inheritdoc />
-        public event ConfigSourceEventHandler Reloaded;
-
-        /// <inheritdoc />
-        public event ConfigSourceEventHandler Saved;
 
         /// <inheritdoc />
         public IEnumerable<IConfig> GetConfigs()

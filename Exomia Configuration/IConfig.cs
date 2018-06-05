@@ -41,6 +41,20 @@ namespace Exomia.Configuration
     /// </summary>
     public interface IConfig
     {
+        #region Variables
+
+        /// <summary>
+        ///     called than the IConfig set a key
+        /// </summary>
+        event ConfigKeyEventHandler KeySet;
+
+        /// <summary>
+        ///     called than the IConfig remove a key
+        /// </summary>
+        event ConfigKeyEventHandler KeyRemoved;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -74,16 +88,6 @@ namespace Exomia.Configuration
         #endregion
 
         #region Methods
-
-        /// <summary>
-        ///     called than the IConfig set a key
-        /// </summary>
-        event ConfigKeyEventHandler KeySet;
-
-        /// <summary>
-        ///     called than the IConfig remove a key
-        /// </summary>
-        event ConfigKeyEventHandler KeyRemoved;
 
         /// <summary>
         ///     checks if the config contains the given key

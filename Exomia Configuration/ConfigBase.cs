@@ -36,6 +36,13 @@ namespace Exomia.Configuration
         #region Variables
 
         private static readonly Regex s_r1;
+
+        /// <inheritdoc />
+        public event ConfigKeyEventHandler KeySet;
+
+        /// <inheritdoc />
+        public event ConfigKeyEventHandler KeyRemoved;
+
         private readonly Dictionary<string, ValueCommentPair> _vcPairs;
 
         /// <summary>
@@ -120,12 +127,6 @@ namespace Exomia.Configuration
         #region Methods
 
         /// <inheritdoc />
-        public event ConfigKeyEventHandler KeySet;
-
-        /// <inheritdoc />
-        public event ConfigKeyEventHandler KeyRemoved;
-
-        /// <inheritdoc />
         public bool Contains(string key)
         {
             return _vcPairs.ContainsKey(key);
@@ -166,7 +167,6 @@ namespace Exomia.Configuration
             {
                 comment = string.Empty;
             }
-
             return TrySet(key, string.Format(format, keys.Select(x => (object)$"${{{x}}}").ToArray()), comment);
         }
 
@@ -175,8 +175,7 @@ namespace Exomia.Configuration
         {
             Type type = typeof(T);
             if (type != typeof(string) && !type.IsPrimitive) { return default(T); }
-
-            return (T)Convert.ChangeType(_vcPairs[key].Value, type);
+            return (T)Convert.ChangeType(_vcPairs[key].Value, type, CultureInfo.InvariantCulture);
         }
 
         /// <inheritdoc />
@@ -184,8 +183,7 @@ namespace Exomia.Configuration
         {
             Type type = typeof(T);
             if (type != typeof(string) && !type.IsPrimitive) { return default(T); }
-
-            return (T)Convert.ChangeType(ExpandValue(_vcPairs[key].Value), type);
+            return (T)Convert.ChangeType(ExpandValue(_vcPairs[key].Value), type, CultureInfo.InvariantCulture);
         }
 
         /// <inheritdoc />
@@ -197,7 +195,7 @@ namespace Exomia.Configuration
 
             try
             {
-                outValue = (T)Convert.ChangeType(_vcPairs[key].Value, type);
+                outValue = (T)Convert.ChangeType(_vcPairs[key].Value, type, CultureInfo.InvariantCulture);
                 return true;
             }
             catch { return false; }
@@ -212,7 +210,7 @@ namespace Exomia.Configuration
 
             try
             {
-                outValue = (T)Convert.ChangeType(ExpandValue(_vcPairs[key].Value), type);
+                outValue = (T)Convert.ChangeType(ExpandValue(_vcPairs[key].Value), type, CultureInfo.InvariantCulture);
                 return true;
             }
             catch { return false; }

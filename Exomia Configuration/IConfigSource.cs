@@ -37,6 +37,20 @@ namespace Exomia.Configuration
     /// </summary>
     public interface IConfigSource
     {
+        #region Variables
+
+        /// <summary>
+        ///     called than the IConfigSource is reloaded
+        /// </summary>
+        event ConfigSourceEventHandler Reloaded;
+
+        /// <summary>
+        ///     called than the IConfigSource is saved
+        /// </summary>
+        event ConfigSourceEventHandler Saved;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -50,16 +64,6 @@ namespace Exomia.Configuration
         #endregion
 
         #region Methods
-
-        /// <summary>
-        ///     called than the IConfigSource is reloaded
-        /// </summary>
-        event ConfigSourceEventHandler Reloaded;
-
-        /// <summary>
-        ///     called than the IConfigSource is saved
-        /// </summary>
-        event ConfigSourceEventHandler Saved;
 
         /// <summary>
         ///     gets all configs in the config source
