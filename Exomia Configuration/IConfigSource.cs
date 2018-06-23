@@ -37,8 +37,6 @@ namespace Exomia.Configuration
     /// </summary>
     public interface IConfigSource
     {
-        #region Variables
-
         /// <summary>
         ///     called than the IConfigSource is reloaded
         /// </summary>
@@ -49,10 +47,6 @@ namespace Exomia.Configuration
         /// </summary>
         event ConfigSourceEventHandler Saved;
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         ///     returns a IConfig from a given section
         /// </summary>
@@ -60,10 +54,6 @@ namespace Exomia.Configuration
         /// <returns>IConfig</returns>
         /// <exception cref="KeyNotFoundException">if the given section does not exists.</exception>
         IConfig this[string section] { get; }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         ///     gets all configs in the config source
@@ -112,7 +102,5 @@ namespace Exomia.Configuration
         ///     saves the current config source
         /// </summary>
         void Save();
-
-        #endregion
     }
 }

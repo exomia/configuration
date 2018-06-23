@@ -29,8 +29,6 @@ namespace Exomia.Configuration.Argv
     /// <inheritdoc />
     public sealed class ArgvConfigSource : ConfigSourceBase
     {
-        #region Methods
-
         /// <inheritdoc />
         protected override IConfig CreateConfig(string section, string comment)
         {
@@ -48,7 +46,5 @@ namespace Exomia.Configuration.Argv
         {
             throw new InvalidOperationException("can't save an ArgvConfigSource");
         }
-
-        #endregion
     }
 }

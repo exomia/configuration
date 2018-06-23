@@ -33,15 +33,9 @@ namespace Exomia.Configuration.Argv
     /// </summary>
     public static class ArgvParser
     {
-        #region Variables
-
         internal const string ESCAPE_COMMENT = ";";
 
         private static readonly Regex s_r1;
-
-        #endregion
-
-        #region Constructors
 
         static ArgvParser()
         {
@@ -49,10 +43,6 @@ namespace Exomia.Configuration.Argv
                 $"^(.+?)\\s*=\\s*(?([\"|\'])[\"|\'](.+)[\"|\'](?:\\s*{ESCAPE_COMMENT}\\s*(.+))?|([^;\\n]+)?(?:\\s*{ESCAPE_COMMENT}\\s*(.+))?)",
                 RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         ///     parse a command line to a ArgvConfigSource
@@ -137,7 +127,5 @@ namespace Exomia.Configuration.Argv
 
             return false;
         }
-
-        #endregion
     }
 }

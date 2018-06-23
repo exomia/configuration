@@ -33,17 +33,7 @@ namespace Exomia.Configuration
     /// <inheritdoc />
     public abstract class ConfigBase : IConfig
     {
-        #region Variables
-
         private static readonly Regex s_r1;
-
-        /// <inheritdoc />
-        public event ConfigKeyEventHandler KeySet;
-
-        /// <inheritdoc />
-        public event ConfigKeyEventHandler KeyRemoved;
-
-        private readonly Dictionary<string, ValueCommentPair> _vcPairs;
 
         /// <summary>
         ///     string
@@ -60,14 +50,35 @@ namespace Exomia.Configuration
         /// </summary>
         protected string _name;
 
-        #endregion
-
-        #region Properties
+        private readonly Dictionary<string, ValueCommentPair> _vcPairs;
 
         internal Dictionary<string, ValueCommentPair> VcPairs
         {
             get { return _vcPairs; }
         }
+
+        static ConfigBase()
+        {
+            s_r1 = new Regex(@"\${(.+?)(?:\.(.+?))?\}");
+        }
+
+        /// <summary>
+        ///     ConfigBase constructor
+        /// </summary>
+        protected ConfigBase(IConfigSource configSource, string name, string comment = "")
+        {
+            _name = name;
+            _configSource = configSource;
+            _comment = comment;
+
+            _vcPairs = new Dictionary<string, ValueCommentPair>();
+        }
+
+        /// <inheritdoc />
+        public event ConfigKeyEventHandler KeySet;
+
+        /// <inheritdoc />
+        public event ConfigKeyEventHandler KeyRemoved;
 
         /// <inheritdoc />
         public IConfigSource ConfigSource
@@ -100,31 +111,6 @@ namespace Exomia.Configuration
             get { return _vcPairs[key].Value; }
             set { Set(key, value); }
         }
-
-        #endregion
-
-        #region Constructors
-
-        static ConfigBase()
-        {
-            s_r1 = new Regex(@"\${(.+?)(?:\.(.+?))?\}");
-        }
-
-        /// <summary>
-        ///     ConfigBase constructor
-        /// </summary>
-        protected ConfigBase(IConfigSource configSource, string name, string comment = "")
-        {
-            _name = name;
-            _configSource = configSource;
-            _comment = comment;
-
-            _vcPairs = new Dictionary<string, ValueCommentPair>();
-        }
-
-        #endregion
-
-        #region Methods
 
         /// <inheritdoc />
         public bool Contains(string key)
@@ -284,7 +270,5 @@ namespace Exomia.Configuration
         /// <param name="value">old value</param>
         /// <param name="comment">old comment</param>
         protected virtual void OnKeyRemove(IConfig sender, string key, string value, string comment) { }
-
-        #endregion
     }
 }

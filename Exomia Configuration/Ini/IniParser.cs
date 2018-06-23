@@ -34,16 +34,10 @@ namespace Exomia.Configuration.Ini
     /// </summary>
     public static class IniParser
     {
-        #region Variables
-
         internal const string ESCAPE_COMMENT = ";";
 
         private static readonly Regex s_r1;
         private static readonly Regex s_r2;
-
-        #endregion
-
-        #region Constructors
 
         static IniParser()
         {
@@ -52,10 +46,6 @@ namespace Exomia.Configuration.Ini
                 RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
             s_r2 = new Regex($"^\\[(.+)\\]\\s*(?:{ESCAPE_COMMENT}(.+))?");
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         ///     parse a ini file to a IniConfigSource
@@ -195,7 +185,5 @@ namespace Exomia.Configuration.Ini
 
             return false;
         }
-
-        #endregion
     }
 }

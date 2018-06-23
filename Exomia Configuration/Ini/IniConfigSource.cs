@@ -30,13 +30,7 @@ namespace Exomia.Configuration.Ini
     /// <inheritdoc />
     public sealed class IniConfigSource : ConfigSourceBase
     {
-        #region Variables
-
         private string _saveFileName = string.Empty;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         ///     SaveFileName
@@ -47,12 +41,8 @@ namespace Exomia.Configuration.Ini
             set { _saveFileName = value; }
         }
 
-        #endregion
-
-        #region Methods
-
         /// <inheritdoc />
-        protected override IConfig CreateConfig(string section, string comment = "")
+        protected override IConfig CreateConfig(string section, string comment)
         {
             return new IniConfig(this, section, comment);
         }
@@ -107,7 +97,5 @@ namespace Exomia.Configuration.Ini
                 }
             }
         }
-
-        #endregion
     }
 }

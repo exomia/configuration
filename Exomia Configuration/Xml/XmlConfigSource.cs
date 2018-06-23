@@ -32,13 +32,7 @@ namespace Exomia.Configuration.Xml
     /// <inheritdoc />
     public sealed class XmlConfigSource : ConfigSourceBase
     {
-        #region Variables
-
         private string _saveFileName = string.Empty;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         ///     SaveFileName
@@ -48,10 +42,6 @@ namespace Exomia.Configuration.Xml
             get { return _saveFileName; }
             set { _saveFileName = value; }
         }
-
-        #endregion
-
-        #region Methods
 
         private static XmlNode CreateSectionNode(XmlDocument doc, string section, string comment = "")
         {
@@ -157,7 +147,5 @@ namespace Exomia.Configuration.Xml
                 doc.WriteContentTo(writer);
             }
         }
-
-        #endregion
     }
 }

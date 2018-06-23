@@ -29,32 +29,10 @@ namespace Exomia.Configuration
     /// <inheritdoc />
     public abstract class ConfigSourceBase : IConfigSource
     {
-        #region Variables
-
-        /// <inheritdoc />
-        public event ConfigSourceEventHandler Reloaded;
-
-        /// <inheritdoc />
-        public event ConfigSourceEventHandler Saved;
-
         /// <summary>
         ///     Dictionary string, IConfig
         /// </summary>
         protected readonly Dictionary<string, IConfig> _configs;
-
-        #endregion
-
-        #region Properties
-
-        /// <inheritdoc />
-        public IConfig this[string section]
-        {
-            get { return Get(section); }
-        }
-
-        #endregion
-
-        #region Constructors
 
         /// <inheritdoc />
         protected ConfigSourceBase()
@@ -62,9 +40,17 @@ namespace Exomia.Configuration
             _configs = new Dictionary<string, IConfig>();
         }
 
-        #endregion
+        /// <inheritdoc />
+        public event ConfigSourceEventHandler Reloaded;
 
-        #region Methods
+        /// <inheritdoc />
+        public event ConfigSourceEventHandler Saved;
+
+        /// <inheritdoc />
+        public IConfig this[string section]
+        {
+            get { return Get(section); }
+        }
 
         /// <inheritdoc />
         public IEnumerable<IConfig> GetConfigs()
@@ -142,7 +128,5 @@ namespace Exomia.Configuration
         ///     called than IConfigSource saved
         /// </summary>
         protected virtual void OnSave() { }
-
-        #endregion
     }
 }

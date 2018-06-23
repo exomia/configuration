@@ -41,8 +41,6 @@ namespace Exomia.Configuration
     /// </summary>
     public interface IConfig
     {
-        #region Variables
-
         /// <summary>
         ///     called than the IConfig set a key
         /// </summary>
@@ -52,10 +50,6 @@ namespace Exomia.Configuration
         ///     called than the IConfig remove a key
         /// </summary>
         event ConfigKeyEventHandler KeyRemoved;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         ///     return the IConfigSource parent
@@ -84,10 +78,6 @@ namespace Exomia.Configuration
         ///     get all keys in the config
         /// </summary>
         IEnumerable<string> Keys { get; }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         ///     checks if the config contains the given key
@@ -188,8 +178,6 @@ namespace Exomia.Configuration
         /// <param name="key">key</param>
         /// <returns><b>true</b> if successfully removed; <b>false otherwise</b></returns>
         bool TryRemove(string key);
-
-        #endregion
     }
 
     internal struct ValueCommentPair

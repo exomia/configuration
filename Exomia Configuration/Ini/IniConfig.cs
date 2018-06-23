@@ -29,14 +29,8 @@ namespace Exomia.Configuration.Ini
     /// <inheritdoc />
     public sealed class IniConfig : ConfigBase
     {
-        #region Variables
-
         private readonly Dictionary<string, string[]> _keyInfos;
         private string[] _infos;
-
-        #endregion
-
-        #region Properties
 
         internal string[] Infos
         {
@@ -49,19 +43,11 @@ namespace Exomia.Configuration.Ini
             get { return _keyInfos; }
         }
 
-        #endregion
-
-        #region Constructors
-
         internal IniConfig(IConfigSource configSource, string name, string comment = "")
             : base(configSource, name, comment)
         {
             _keyInfos = new Dictionary<string, string[]>();
         }
-
-        #endregion
-
-        #region Methods
 
         internal void AddKeyInternal(string key, string value, string comment, string[] infos = null)
         {
@@ -71,7 +57,5 @@ namespace Exomia.Configuration.Ini
                 _keyInfos.Add(key, infos);
             }
         }
-
-        #endregion
     }
 }

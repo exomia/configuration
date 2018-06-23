@@ -34,8 +34,6 @@ namespace Exomia.Configuration.Xml
     /// </summary>
     public static class XmlParser
     {
-        #region Methods
-
         /// <summary>
         ///     parse a xml file to a XmlConfigSource
         /// </summary>
@@ -169,7 +167,5 @@ namespace Exomia.Configuration.Xml
             Merge(stream, source);
             return source;
         }
-
-        #endregion
     }
 }
