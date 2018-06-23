@@ -2,6 +2,9 @@
 
 exomia/configuration supports loading of ini, xml configuration files & command line configurations
 
+![](https://img.shields.io/github/issues-pr/exomia/configuration.svg) ![](https://img.shields.io/github/issues/exomia/configuration.svg)  ![](https://img.shields.io/github/last-commit/exomia/configuration.svg) ![](https://img.shields.io/github/contributors/exomia/configuration.svg) ![](https://img.shields.io/github/commit-activity/y/exomia/configuration.svg) ![](https://img.shields.io/github/languages/top/exomia/configuration.svg) ![](https://img.shields.io/github/languages/count/exomia/configuration.svg) ![](https://img.shields.io/github/license/exomia/configuration.svg)
+
+
 ## Example
 
 #### Ini-Files / XML-Files
