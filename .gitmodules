@@ -1,0 +1,3 @@
+[submodule "configuration.wiki"]
+	path = configuration.wiki
+	url = https://github.com/exomia/configuration.wiki.git
