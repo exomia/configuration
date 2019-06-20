@@ -11,6 +11,21 @@ exomia/configuration supports loading of ini, xml configuration files & command 
 ![](https://img.shields.io/github/languages/count/exomia/configuration.svg)
 ![](https://img.shields.io/github/license/exomia/configuration.svg)
 
+## Installing
+
+```shell
+[Package Manager]
+PM> Install-Package Exomia.Configuration
+```
+
+## Features
+
+- ini, xml & argv support
+- merging of IConfigSource together
+- expanding of keys
+- comments
+- ...
+
 ## Example
 
 #### Ini-Files / XML-Files
@@ -116,19 +131,4 @@ IConfigSource source3 = ArgvParser.Parse(args, 0, "argv", "argv section");
 IConfig cfga = source3.Get("argv");
 Console.WriteLine(cfga.Get<string>("-p"));   	//path to sth
 Console.WriteLine(cfga.Get<string>("number"));	//453
-```
-
-## Features
-
-- ini, xml & argv support
-- merging of IConfigSource together
-- expanding of keys
-- comments
-- ...
-
-## Installing
-
-```shell
-[Package Manager]
-PM> Install-Package Exomia.Configuration
 ```
