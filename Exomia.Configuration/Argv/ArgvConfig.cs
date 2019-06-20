@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ namespace Exomia.Configuration.Argv
     public sealed class ArgvConfig : ConfigBase
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ArgvConfig"/> class.
+        ///     Initializes a new instance of the <see cref="ArgvConfig" /> class.
         /// </summary>
         /// <param name="configSource"> The configuration source. </param>
         /// <param name="name">         The name. </param>

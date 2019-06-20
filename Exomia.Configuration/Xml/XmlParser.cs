@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,6 @@ using System.Xml;
 
 namespace Exomia.Configuration.Xml
 {
-
     /// <summary>
     ///     An XML parser.
     /// </summary>
@@ -79,19 +78,17 @@ namespace Exomia.Configuration.Xml
         /// <exception cref="Exception">             Thrown when an exception error condition occurs. </exception>
         public static void Merge(Stream stream, XmlConfigSource source)
         {
-            if (stream == null) { throw new ArgumentNullException(nameof(stream)); }
-            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (stream        == null) { throw new ArgumentNullException(nameof(stream)); }
+            if (source        == null) { throw new ArgumentNullException(nameof(source)); }
             if (stream.Length <= 0) { return; }
 
-            XmlConfig config = null;
-            List<string> infos = new List<string>();
+            XmlConfig    config = null;
+            List<string> infos  = new List<string>();
 
             stream.Position = 0;
             XmlReaderSettings settings = new XmlReaderSettings
             {
-                CloseInput = true,
-                ConformanceLevel = ConformanceLevel.Document,
-                IgnoreComments = false
+                CloseInput = true, ConformanceLevel = ConformanceLevel.Document, IgnoreComments = false
             };
 
             using (XmlReader reader = XmlReader.Create(stream, settings))
@@ -121,7 +118,7 @@ namespace Exomia.Configuration.Xml
                                         {
                                             comment = reader.Value;
                                         }
-                                        config = (XmlConfig)source.Add(section, comment);
+                                        config       = (XmlConfig)source.Add(section, comment);
                                         config.Infos = infos.ToArray();
                                         infos.Clear();
                                     }
@@ -177,8 +174,7 @@ namespace Exomia.Configuration.Xml
         {
             if (source == null)
             {
-                source = new XmlConfigSource
-                    { SaveFileName = fileName };
+                source = new XmlConfigSource { SaveFileName = fileName };
             }
             Merge(stream, source);
             return source;

@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@ namespace Exomia.Configuration.Argv
         private static readonly Regex s_r1;
 
         /// <summary>
-        ///     Initializes static members of the <see cref="ArgvParser"/> class.
+        ///     Initializes static members of the <see cref="ArgvParser" /> class.
         /// </summary>
         static ArgvParser()
         {
@@ -80,10 +80,10 @@ namespace Exomia.Configuration.Argv
         /// <param name="comment">    (Optional) comment. </param>
         /// <exception cref="ArgumentNullException"> Thrown when one or more required arguments are null. </exception>
         public static void Merge(ArgvConfigSource source, string[] argv, int startIndex, string section,
-            string comment = "")
+                                 string           comment = "")
         {
             if (source == null) { throw new ArgumentNullException(nameof(source)); }
-            if (argv == null) { throw new ArgumentNullException(nameof(argv)); }
+            if (argv   == null) { throw new ArgumentNullException(nameof(argv)); }
 
             ArgvConfig config = (ArgvConfig)source.Add(section, comment);
 
@@ -113,11 +113,11 @@ namespace Exomia.Configuration.Argv
         /// <returns>
         ///     True if it succeeds, false if it fails.
         /// </returns>
-        private static bool GetKeyValueCommentFromArgv(string line, out string key, out string value,
-            out string comment)
+        private static bool GetKeyValueCommentFromArgv(string     line, out string key, out string value,
+                                                       out string comment)
         {
-            key = string.Empty;
-            value = string.Empty;
+            key     = string.Empty;
+            value   = string.Empty;
             comment = string.Empty;
 
             Match match = s_r1.Match(line);

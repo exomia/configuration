@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,19 +31,19 @@ namespace Exomia.Configuration.Argv
     /// </summary>
     public sealed class ArgvConfigSource : ConfigSourceBase
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override IConfig CreateConfig(string section, string comment)
         {
             return new ArgvConfig(this, section, comment);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void OnReload()
         {
             throw new InvalidOperationException("can't reload an ArgvConfigSource");
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void OnSave()
         {
             throw new InvalidOperationException("can't save an ArgvConfigSource");

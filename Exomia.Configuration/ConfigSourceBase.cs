@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,22 +29,8 @@ namespace Exomia.Configuration
     /// <summary>
     ///     A configuration source base.
     /// </summary>
-    ///
-    /// ### <inheritdoc/>
     public abstract class ConfigSourceBase : IConfigSource
     {
-
-        /// <summary>
-        ///     The configs.
-        /// </summary>
-        protected readonly Dictionary<string, IConfig> _configs;
-
-        /// <inheritdoc/>
-        protected ConfigSourceBase()
-        {
-            _configs = new Dictionary<string, IConfig>();
-        }
-
         /// <summary>
         ///     Occurs when Reloaded.
         /// </summary>
@@ -55,13 +41,24 @@ namespace Exomia.Configuration
         /// </summary>
         public event ConfigSourceEventHandler Saved;
 
-        /// <inheritdoc/>
+        /// <summary>
+        ///     The configs.
+        /// </summary>
+        protected readonly Dictionary<string, IConfig> _configs;
+
+        /// <inheritdoc />
         public IConfig this[string section]
         {
             get { return Get(section); }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
+        protected ConfigSourceBase()
+        {
+            _configs = new Dictionary<string, IConfig>();
+        }
+
+        /// <inheritdoc />
         public IEnumerable<IConfig> GetConfigs()
         {
             foreach (IConfig cfg in _configs.Values)
@@ -70,7 +67,7 @@ namespace Exomia.Configuration
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IConfig Add(string section, string comment = "")
         {
             IConfig config = CreateConfig(section, comment);
@@ -78,19 +75,19 @@ namespace Exomia.Configuration
             return config;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IConfig Get(string section)
         {
             return _configs[section];
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool TryGet(string section, out IConfig config)
         {
             return _configs.TryGetValue(section, out config);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Merge(IConfigSource source)
         {
             foreach (IConfig config in source.GetConfigs())
@@ -106,14 +103,14 @@ namespace Exomia.Configuration
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Reload()
         {
             OnReload();
             Reloaded?.Invoke(this);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void Save()
         {
             OnSave();

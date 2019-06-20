@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,6 @@ namespace Exomia.Configuration.Xml
         ///     Filename of the save file.
         /// </summary>
         private string _saveFileName = string.Empty;
-
 
         /// <summary>
         ///     Gets or sets the filename of the save file.
@@ -95,6 +94,7 @@ namespace Exomia.Configuration.Xml
 
             XmlAttribute keyAttr = doc.CreateAttribute("key");
             keyAttr.Value = key;
+
             // ReSharper disable once PossibleNullReferenceException
             node.Attributes.Append(keyAttr);
 
@@ -111,13 +111,13 @@ namespace Exomia.Configuration.Xml
             return node;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override IConfig CreateConfig(string section, string comment)
         {
             return new XmlConfig(this, section, comment);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void OnReload()
         {
             if (string.IsNullOrEmpty(_saveFileName))
@@ -128,7 +128,7 @@ namespace Exomia.Configuration.Xml
             XmlParser.Merge(new FileStream(_saveFileName, FileMode.Open, FileAccess.Read), this);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void OnSave()
         {
             if (string.IsNullOrEmpty(_saveFileName))
@@ -136,8 +136,8 @@ namespace Exomia.Configuration.Xml
                 throw new FileNotFoundException("SaveFileName was not declared.", "SaveFileName");
             }
 
-            XmlDocument doc = new XmlDocument();
-            XmlNode root = doc.CreateElement("config");
+            XmlDocument doc  = new XmlDocument();
+            XmlNode     root = doc.CreateElement("config");
             doc.AppendChild(root);
 
             // ReSharper disable once PossibleInvalidCastExceptionInForeachLoop
@@ -156,20 +156,20 @@ namespace Exomia.Configuration.Xml
                 foreach (KeyValuePair<string, ValueCommentPair> item in cfg.VcPairs)
                 {
                     ValueCommentPair pair = item.Value;
-                    XmlNode kvc = CreateKvcNode(doc, item.Key, pair.Value, pair.Comment);
+                    XmlNode          kvc  = CreateKvcNode(doc, item.Key, pair.Value, pair.Comment);
                     section.AppendChild(kvc);
                 }
             }
 
             XmlWriterSettings settings = new XmlWriterSettings
             {
-                Encoding = Encoding.UTF8,
-                ConformanceLevel = ConformanceLevel.Document,
+                Encoding           = Encoding.UTF8,
+                ConformanceLevel   = ConformanceLevel.Document,
                 OmitXmlDeclaration = false,
-                CloseOutput = true,
-                Indent = true,
-                IndentChars = "\t",
-                NewLineHandling = NewLineHandling.Replace
+                CloseOutput        = true,
+                Indent             = true,
+                IndentChars        = "\t",
+                NewLineHandling    = NewLineHandling.Replace
             };
 
             using (XmlWriter writer = XmlWriter.Create(_saveFileName, settings))

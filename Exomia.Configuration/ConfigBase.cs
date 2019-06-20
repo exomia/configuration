@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,6 @@ namespace Exomia.Configuration
     /// <summary>
     ///     A configuration base.
     /// </summary>
-    ///
-    /// ### <inheritdoc/>
     public abstract class ConfigBase : IConfig
     {
         /// <summary>
@@ -42,6 +40,15 @@ namespace Exomia.Configuration
         /// </summary>
         private static readonly Regex s_r1;
 
+        /// <summary>
+        ///     Occurs when Key Set.
+        /// </summary>
+        public event ConfigKeyEventHandler KeySet;
+
+        /// <summary>
+        ///     Occurs when Key Removed.
+        /// </summary>
+        public event ConfigKeyEventHandler KeyRemoved;
 
         /// <summary>
         ///     The comment.
@@ -53,7 +60,6 @@ namespace Exomia.Configuration
         /// </summary>
         protected IConfigSource _configSource;
 
-
         /// <summary>
         ///     The name.
         /// </summary>
@@ -63,6 +69,38 @@ namespace Exomia.Configuration
         ///     The vc pairs.
         /// </summary>
         private readonly Dictionary<string, ValueCommentPair> _vcPairs;
+
+        /// <inheritdoc />
+        public IConfigSource ConfigSource
+        {
+            get { return _configSource; }
+        }
+
+        /// <inheritdoc />
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        /// <inheritdoc />
+        public string Comment
+        {
+            get { return _comment; }
+            set { _comment = value; }
+        }
+
+        /// <inheritdoc />
+        public IEnumerable<string> Keys
+        {
+            get { return _vcPairs.Keys; }
+        }
+
+        /// <inheritdoc />
+        public virtual string this[string key]
+        {
+            get { return _vcPairs[key].Value; }
+            set { Set(key, value); }
+        }
 
         /// <summary>
         ///     Gets the vc pairs.
@@ -76,7 +114,7 @@ namespace Exomia.Configuration
         }
 
         /// <summary>
-        ///     Initializes static members of the <see cref="ConfigBase"/> class.
+        ///     Initializes static members of the <see cref="ConfigBase" /> class.
         /// </summary>
         static ConfigBase()
         {
@@ -91,66 +129,20 @@ namespace Exomia.Configuration
         /// <param name="comment">      (Optional) new comment. </param>
         protected ConfigBase(IConfigSource configSource, string name, string comment = "")
         {
-            _name = name;
+            _name         = name;
             _configSource = configSource;
-            _comment = comment;
+            _comment      = comment;
 
             _vcPairs = new Dictionary<string, ValueCommentPair>();
         }
 
-        /// <summary>
-        ///     Occurs when Key Set.
-        /// </summary>
-        ///
-        /// ### <inheritdoc/>
-        public event ConfigKeyEventHandler KeySet;
-
-        /// <summary>
-        ///     Occurs when Key Removed.
-        /// </summary>
-        ///
-        /// ### <inheritdoc/>
-        public event ConfigKeyEventHandler KeyRemoved;
-
-        /// <inheritdoc/>
-        public IConfigSource ConfigSource
-        {
-            get { return _configSource; }
-        }
-
-        /// <inheritdoc/>
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        /// <inheritdoc/>
-        public string Comment
-        {
-            get { return _comment; }
-            set { _comment = value; }
-        }
-
-        /// <inheritdoc/>
-        public IEnumerable<string> Keys
-        {
-            get { return _vcPairs.Keys; }
-        }
-
-        /// <inheritdoc/>
-        public virtual string this[string key]
-        {
-            get { return _vcPairs[key].Value; }
-            set { Set(key, value); }
-        }
-
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool Contains(string key)
         {
             return _vcPairs.ContainsKey(key);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual void Set<T>(string key, T value, string comment = "") where T : IConvertible
         {
             ValueCommentPair buffer = new ValueCommentPair(value.ToString(CultureInfo.InvariantCulture), comment);
@@ -160,7 +152,7 @@ namespace Exomia.Configuration
             KeySet?.Invoke(this, key, buffer.Value, buffer.Comment);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual bool TrySet<T>(string key, T value, string comment = "") where T : IConvertible
         {
             if (_vcPairs.ContainsKey(key)) { return false; }
@@ -168,7 +160,7 @@ namespace Exomia.Configuration
             return true;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual void SetExpanded(string key, string format, string comment, params string[] keys)
         {
             if (comment == null)
@@ -178,7 +170,7 @@ namespace Exomia.Configuration
             Set(key, string.Format(format, keys.Select(x => (object)$"${{{x}}}").ToArray()), comment);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual bool TrySetExpanded(string key, string format, string comment, params string[] keys)
         {
             if (comment == null)
@@ -188,26 +180,26 @@ namespace Exomia.Configuration
             return TrySet(key, string.Format(format, keys.Select(x => (object)$"${{{x}}}").ToArray()), comment);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual T Get<T>(string key) where T : IConvertible
         {
             Type type = typeof(T);
-            if (type != typeof(string) && !type.IsPrimitive) { return default(T); }
+            if (type != typeof(string) && !type.IsPrimitive) { return default; }
             return (T)Convert.ChangeType(_vcPairs[key].Value, type, CultureInfo.InvariantCulture);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual T GetExpanded<T>(string key) where T : IConvertible
         {
             Type type = typeof(T);
-            if (type != typeof(string) && !type.IsPrimitive) { return default(T); }
+            if (type != typeof(string) && !type.IsPrimitive) { return default; }
             return (T)Convert.ChangeType(ExpandValue(_vcPairs[key].Value), type, CultureInfo.InvariantCulture);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual bool TryGet<T>(string key, out T outValue) where T : IConvertible
         {
-            outValue = default(T);
+            outValue = default;
             Type type = typeof(T);
             if (type == typeof(string) && !type.IsPrimitive && !_vcPairs.ContainsKey(key)) { return false; }
 
@@ -219,10 +211,10 @@ namespace Exomia.Configuration
             catch { return false; }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual bool TryGetExpanded<T>(string key, out T outValue) where T : IConvertible
         {
-            outValue = default(T);
+            outValue = default;
             Type type = typeof(T);
             if (type == typeof(string) && !type.IsPrimitive && !_vcPairs.ContainsKey(key)) { return false; }
 
@@ -234,7 +226,7 @@ namespace Exomia.Configuration
             catch { return false; }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual bool Remove(string key)
         {
             ValueCommentPair buffer = _vcPairs[key];
@@ -248,13 +240,13 @@ namespace Exomia.Configuration
             return false;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public virtual bool TryRemove(string key)
         {
             return !_vcPairs.ContainsKey(key) && Remove(key);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"[{_name}]" + (string.IsNullOrEmpty(_comment) ? string.Empty : $" ;{_comment}");

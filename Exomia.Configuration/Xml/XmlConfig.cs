@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ namespace Exomia.Configuration.Xml
         ///     The key infos.
         /// </summary>
         private readonly Dictionary<string, string[]> _keyInfos;
+
         /// <summary>
         ///     The infos.
         /// </summary>
@@ -64,7 +65,7 @@ namespace Exomia.Configuration.Xml
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="XmlConfig"/> class.
+        ///     Initializes a new instance of the <see cref="XmlConfig" /> class.
         /// </summary>
         /// <param name="configSource"> The configuration source. </param>
         /// <param name="name">         The name. </param>

@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ namespace Exomia.Configuration
     public delegate void ConfigKeyEventHandler(IConfig sender, string key, string value, string comment);
 
     /// <summary>
-    ///     IConfig interface.
+    ///     Interface for configuration.
     /// </summary>
     public interface IConfig
     {
@@ -82,7 +82,6 @@ namespace Exomia.Configuration
         /// <returns>
         ///     value.
         /// </returns>
-        ///
         /// <exception cref="KeyNotFoundException"> if the given key does not exists. </exception>
         string this[string key] { get; set; }
 
@@ -221,23 +220,24 @@ namespace Exomia.Configuration
         ///     The value.
         /// </summary>
         public string Value;
+
         /// <summary>
         ///     The comment.
         /// </summary>
         public string Comment;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ValueCommentPair"/> struct.
+        ///     Initializes a new instance of the <see cref="ValueCommentPair" /> struct.
         /// </summary>
         /// <param name="value">   The value. </param>
         /// <param name="comment"> The comment. </param>
         public ValueCommentPair(string value, string comment)
         {
-            Value = value;
+            Value   = value;
             Comment = comment;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override string ToString()
         {
             return (Value.Contains(";") ? $"\"{Value}\"" : $"{Value}") +

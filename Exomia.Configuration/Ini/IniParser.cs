@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,6 @@ using System.Text.RegularExpressions;
 
 namespace Exomia.Configuration.Ini
 {
-
     /// <summary>
     ///     An init file parser.
     /// </summary>
@@ -44,13 +43,14 @@ namespace Exomia.Configuration.Ini
         ///     The first s r.
         /// </summary>
         private static readonly Regex s_r1;
+
         /// <summary>
         ///     The second s r.
         /// </summary>
         private static readonly Regex s_r2;
 
         /// <summary>
-        ///     Initializes static members of the <see cref="IniParser"/> class.
+        ///     Initializes static members of the <see cref="IniParser" /> class.
         /// </summary>
         static IniParser()
         {
@@ -103,15 +103,15 @@ namespace Exomia.Configuration.Ini
         /// <exception cref="ArgumentNullException"> Thrown when one or more required arguments are null. </exception>
         public static void Merge(Stream stream, IniConfigSource source)
         {
-            if (stream == null) { throw new ArgumentNullException(nameof(stream)); }
-            if (source == null) { throw new ArgumentNullException(nameof(source)); }
+            if (stream        == null) { throw new ArgumentNullException(nameof(stream)); }
+            if (source        == null) { throw new ArgumentNullException(nameof(source)); }
             if (stream.Length <= 0) { return; }
 
             stream.Position = 0;
             using (StreamReader sr = new StreamReader(stream))
             {
-                IniConfig config = null;
-                List<string> infos = new List<string>();
+                IniConfig    config = null;
+                List<string> infos  = new List<string>();
                 while (!sr.EndOfStream)
                 {
                     string line = sr.ReadLine()?.Trim('\r', '\n', ' ');
@@ -126,7 +126,7 @@ namespace Exomia.Configuration.Ini
                     {
                         if (GetSection(line, out string section, out comment))
                         {
-                            config = (IniConfig)source.Add(section, comment);
+                            config       = (IniConfig)source.Add(section, comment);
                             config.Infos = infos.ToArray();
                             infos.Clear();
                         }
@@ -156,8 +156,7 @@ namespace Exomia.Configuration.Ini
         {
             if (source == null)
             {
-                source = new IniConfigSource
-                    { SaveFileName = fileName };
+                source = new IniConfigSource { SaveFileName = fileName };
             }
             Merge(stream, source);
             return source;
@@ -196,11 +195,11 @@ namespace Exomia.Configuration.Ini
         /// <returns>
         ///     True if it succeeds, false if it fails.
         /// </returns>
-        private static bool GetKeyValueCommentFromLine(string line, out string key, out string value,
-            out string comment)
+        private static bool GetKeyValueCommentFromLine(string     line, out string key, out string value,
+                                                       out string comment)
         {
-            key = string.Empty;
-            value = string.Empty;
+            key     = string.Empty;
+            value   = string.Empty;
             comment = string.Empty;
 
             Match match = s_r1.Match(line);

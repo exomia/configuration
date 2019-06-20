@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,6 @@ namespace Exomia.Configuration.Ini
         /// </summary>
         private string _saveFileName = string.Empty;
 
-
         /// <summary>
         ///     Gets or sets the filename of the save file.
         /// </summary>
@@ -50,13 +49,13 @@ namespace Exomia.Configuration.Ini
             set { _saveFileName = value; }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override IConfig CreateConfig(string section, string comment)
         {
             return new IniConfig(this, section, comment);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void OnReload()
         {
             if (string.IsNullOrEmpty(_saveFileName))
@@ -67,7 +66,7 @@ namespace Exomia.Configuration.Ini
             IniParser.Merge(new FileStream(_saveFileName, FileMode.Open, FileAccess.Read), this);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void OnSave()
         {
             if (string.IsNullOrEmpty(_saveFileName))

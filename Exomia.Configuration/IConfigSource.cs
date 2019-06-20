@@ -1,6 +1,6 @@
 ﻿#region MIT License
 
-// Copyright (c) 2018 exomia - Daniel Bätz
+// Copyright (c) 2019 exomia - Daniel Bätz
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ namespace Exomia.Configuration
     public delegate void ConfigSourceEventHandler(IConfigSource sender);
 
     /// <summary>
-    ///     IConfigSource interface.
+    ///     Interface for configuration source.
     /// </summary>
     public interface IConfigSource
     {
