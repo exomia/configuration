@@ -29,47 +29,54 @@ using System.Xml;
 
 namespace Exomia.Configuration.Xml
 {
+
     /// <summary>
-    ///     XmlParser class
+    ///     An XML parser.
     /// </summary>
     public static class XmlParser
     {
         /// <summary>
-        ///     parse a xml file to a XmlConfigSource
+        ///     parse a xml file to a XmlConfigSource.
         /// </summary>
-        /// <param name="fileName">fileName</param>
-        /// <returns>XmlConfigSource</returns>
+        /// <param name="fileName"> fileName. </param>
+        /// <returns>
+        ///     XmlConfigSource.
+        /// </returns>
         public static XmlConfigSource Parse(string fileName)
         {
             return Parse(new FileStream(fileName, FileMode.Open, FileAccess.Read), null, fileName);
         }
 
         /// <summary>
-        ///     parse a xml file to a IniConfigSource
+        ///     parse a xml file to a IniConfigSource.
         /// </summary>
-        /// <param name="stream">stream</param>
-        /// <param name="fileName">fileName</param>
-        /// <returns>XmlConfigSource</returns>
+        /// <param name="stream">   stream. </param>
+        /// <param name="fileName"> (Optional) fileName. </param>
+        /// <returns>
+        ///     XmlConfigSource.
+        /// </returns>
         public static XmlConfigSource Parse(Stream stream, string fileName = "")
         {
             return Parse(stream, null, fileName);
         }
 
         /// <summary>
-        ///     merge a xml file with an existing XmlConfigSource
+        ///     merge a xml file with an existing XmlConfigSource.
         /// </summary>
-        /// <param name="fileName">fileName</param>
-        /// <param name="source">source</param>
+        /// <param name="fileName"> fileName. </param>
+        /// <param name="source">   source. </param>
         public static void Merge(string fileName, XmlConfigSource source)
         {
             Merge(new FileStream(fileName, FileMode.Open, FileAccess.Read), source);
         }
 
         /// <summary>
-        ///     merge a xml file stream with an existing XmlConfigSource
+        ///     merge a xml file stream with an existing XmlConfigSource.
         /// </summary>
-        /// <param name="stream">stream</param>
-        /// <param name="source">source</param>
+        /// <param name="stream"> stream. </param>
+        /// <param name="source"> source. </param>
+        /// <exception cref="ArgumentNullException"> Thrown when one or more required arguments are null. </exception>
+        /// <exception cref="Exception">             Thrown when an exception error condition occurs. </exception>
         public static void Merge(Stream stream, XmlConfigSource source)
         {
             if (stream == null) { throw new ArgumentNullException(nameof(stream)); }
@@ -157,6 +164,15 @@ namespace Exomia.Configuration.Xml
             }
         }
 
+        /// <summary>
+        ///     parse a xml file to a IniConfigSource.
+        /// </summary>
+        /// <param name="stream">   stream. </param>
+        /// <param name="source">   source. </param>
+        /// <param name="fileName"> (Optional) fileName. </param>
+        /// <returns>
+        ///     XmlConfigSource.
+        /// </returns>
         internal static XmlConfigSource Parse(Stream stream, XmlConfigSource source, string fileName = "")
         {
             if (source == null)

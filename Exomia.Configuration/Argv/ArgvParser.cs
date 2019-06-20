@@ -29,14 +29,23 @@ namespace Exomia.Configuration.Argv
 {
     //TODO: better parsing from command line support -p="" --p="" -p=44 --p=45
     /// <summary>
-    ///     ArgvParser class
+    ///     An argv parser.
     /// </summary>
     public static class ArgvParser
     {
+        /// <summary>
+        ///     The escape comment.
+        /// </summary>
         internal const string ESCAPE_COMMENT = ";";
 
+        /// <summary>
+        ///     The first s r.
+        /// </summary>
         private static readonly Regex s_r1;
 
+        /// <summary>
+        ///     Initializes static members of the <see cref="ArgvParser"/> class.
+        /// </summary>
         static ArgvParser()
         {
             s_r1 = new Regex(
@@ -45,13 +54,15 @@ namespace Exomia.Configuration.Argv
         }
 
         /// <summary>
-        ///     parse a command line to a ArgvConfigSource
+        ///     parse a command line to a ArgvConfigSource.
         /// </summary>
-        /// <param name="argv">command line args</param>
-        /// <param name="startIndex">start index</param>
-        /// <param name="section">section</param>
-        /// <param name="comment">comment</param>
-        /// <returns>ArgvConfigSource</returns>
+        /// <param name="argv">       command line args. </param>
+        /// <param name="startIndex"> start index. </param>
+        /// <param name="section">    section. </param>
+        /// <param name="comment">    (Optional) comment. </param>
+        /// <returns>
+        ///     ArgvConfigSource.
+        /// </returns>
         public static ArgvConfigSource Parse(string[] argv, int startIndex, string section, string comment = "")
         {
             ArgvConfigSource source = new ArgvConfigSource();
@@ -60,13 +71,14 @@ namespace Exomia.Configuration.Argv
         }
 
         /// <summary>
-        ///     merge a command line with an existing ArgvConfigSource
+        ///     merge a command line with an existing ArgvConfigSource.
         /// </summary>
-        /// <param name="source">source</param>
-        /// <param name="argv">command line args</param>
-        /// <param name="startIndex">start index</param>
-        /// <param name="section">section</param>
-        /// <param name="comment">comment</param>
+        /// <param name="source">     source. </param>
+        /// <param name="argv">       command line args. </param>
+        /// <param name="startIndex"> start index. </param>
+        /// <param name="section">    section. </param>
+        /// <param name="comment">    (Optional) comment. </param>
+        /// <exception cref="ArgumentNullException"> Thrown when one or more required arguments are null. </exception>
         public static void Merge(ArgvConfigSource source, string[] argv, int startIndex, string section,
             string comment = "")
         {
@@ -91,6 +103,16 @@ namespace Exomia.Configuration.Argv
             }
         }
 
+        /// <summary>
+        ///     Gets key value comment from argv.
+        /// </summary>
+        /// <param name="line">    The line. </param>
+        /// <param name="key">     [out] The key. </param>
+        /// <param name="value">   [out] The value. </param>
+        /// <param name="comment"> [out] comment. </param>
+        /// <returns>
+        ///     True if it succeeds, false if it fails.
+        /// </returns>
         private static bool GetKeyValueCommentFromArgv(string line, out string key, out string value,
             out string comment)
         {

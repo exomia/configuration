@@ -24,9 +24,17 @@
 
 namespace Exomia.Configuration.Argv
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     An argv configuration. This class cannot be inherited.
+    /// </summary>
     public sealed class ArgvConfig : ConfigBase
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ArgvConfig"/> class.
+        /// </summary>
+        /// <param name="configSource"> The configuration source. </param>
+        /// <param name="name">         The name. </param>
+        /// <param name="comment">      (Optional) The comment. </param>
         internal ArgvConfig(IConfigSource configSource, string name, string comment = "")
             : base(configSource, name, comment) { }
     }

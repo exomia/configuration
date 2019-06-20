@@ -27,27 +27,36 @@ using System.IO;
 
 namespace Exomia.Configuration.Ini
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     An initialise configuration source. This class cannot be inherited.
+    /// </summary>
     public sealed class IniConfigSource : ConfigSourceBase
     {
+        /// <summary>
+        ///     Filename of the save file.
+        /// </summary>
         private string _saveFileName = string.Empty;
 
+
         /// <summary>
-        ///     SaveFileName
+        ///     Gets or sets the filename of the save file.
         /// </summary>
+        /// <value>
+        ///     The filename of the save file.
+        /// </value>
         public string SaveFileName
         {
             get { return _saveFileName; }
             set { _saveFileName = value; }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override IConfig CreateConfig(string section, string comment)
         {
             return new IniConfig(this, section, comment);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override void OnReload()
         {
             if (string.IsNullOrEmpty(_saveFileName))
@@ -58,7 +67,7 @@ namespace Exomia.Configuration.Ini
             IniParser.Merge(new FileStream(_saveFileName, FileMode.Open, FileAccess.Read), this);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override void OnSave()
         {
             if (string.IsNullOrEmpty(_saveFileName))
@@ -68,6 +77,7 @@ namespace Exomia.Configuration.Ini
             using (StreamWriter sw =
                 new StreamWriter(new FileStream(_saveFileName, FileMode.OpenOrCreate, FileAccess.Write)))
             {
+                // ReSharper disable once PossibleInvalidCastExceptionInForeachLoop
                 foreach (IniConfig cfg in _configs.Values)
                 {
                     if (cfg.Infos != null)

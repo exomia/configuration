@@ -30,41 +30,65 @@ using System.Text.RegularExpressions;
 
 namespace Exomia.Configuration
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     A configuration base.
+    /// </summary>
+    ///
+    /// ### <inheritdoc/>
     public abstract class ConfigBase : IConfig
     {
+        /// <summary>
+        ///     The first s r.
+        /// </summary>
         private static readonly Regex s_r1;
 
+
         /// <summary>
-        ///     string
+        ///     The comment.
         /// </summary>
         protected string _comment;
 
         /// <summary>
-        ///     IConfigSource
+        ///     The configuration source.
         /// </summary>
         protected IConfigSource _configSource;
 
+
         /// <summary>
-        ///     string
+        ///     The name.
         /// </summary>
         protected string _name;
 
+        /// <summary>
+        ///     The vc pairs.
+        /// </summary>
         private readonly Dictionary<string, ValueCommentPair> _vcPairs;
 
+        /// <summary>
+        ///     Gets the vc pairs.
+        /// </summary>
+        /// <value>
+        ///     The vc pairs.
+        /// </value>
         internal Dictionary<string, ValueCommentPair> VcPairs
         {
             get { return _vcPairs; }
         }
 
+        /// <summary>
+        ///     Initializes static members of the <see cref="ConfigBase"/> class.
+        /// </summary>
         static ConfigBase()
         {
             s_r1 = new Regex(@"\${(.+?)(?:\.(.+?))?\}");
         }
 
         /// <summary>
-        ///     ConfigBase constructor
+        ///     ConfigBase constructor.
         /// </summary>
+        /// <param name="configSource"> The configuration source. </param>
+        /// <param name="name">         The name. </param>
+        /// <param name="comment">      (Optional) new comment. </param>
         protected ConfigBase(IConfigSource configSource, string name, string comment = "")
         {
             _name = name;
@@ -74,51 +98,59 @@ namespace Exomia.Configuration
             _vcPairs = new Dictionary<string, ValueCommentPair>();
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Occurs when Key Set.
+        /// </summary>
+        ///
+        /// ### <inheritdoc/>
         public event ConfigKeyEventHandler KeySet;
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Occurs when Key Removed.
+        /// </summary>
+        ///
+        /// ### <inheritdoc/>
         public event ConfigKeyEventHandler KeyRemoved;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IConfigSource ConfigSource
         {
             get { return _configSource; }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public string Name
         {
             get { return _name; }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public string Comment
         {
             get { return _comment; }
             set { _comment = value; }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IEnumerable<string> Keys
         {
             get { return _vcPairs.Keys; }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual string this[string key]
         {
             get { return _vcPairs[key].Value; }
             set { Set(key, value); }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool Contains(string key)
         {
             return _vcPairs.ContainsKey(key);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void Set<T>(string key, T value, string comment = "") where T : IConvertible
         {
             ValueCommentPair buffer = new ValueCommentPair(value.ToString(CultureInfo.InvariantCulture), comment);
@@ -128,7 +160,7 @@ namespace Exomia.Configuration
             KeySet?.Invoke(this, key, buffer.Value, buffer.Comment);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual bool TrySet<T>(string key, T value, string comment = "") where T : IConvertible
         {
             if (_vcPairs.ContainsKey(key)) { return false; }
@@ -136,7 +168,7 @@ namespace Exomia.Configuration
             return true;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual void SetExpanded(string key, string format, string comment, params string[] keys)
         {
             if (comment == null)
@@ -146,7 +178,7 @@ namespace Exomia.Configuration
             Set(key, string.Format(format, keys.Select(x => (object)$"${{{x}}}").ToArray()), comment);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual bool TrySetExpanded(string key, string format, string comment, params string[] keys)
         {
             if (comment == null)
@@ -156,7 +188,7 @@ namespace Exomia.Configuration
             return TrySet(key, string.Format(format, keys.Select(x => (object)$"${{{x}}}").ToArray()), comment);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual T Get<T>(string key) where T : IConvertible
         {
             Type type = typeof(T);
@@ -164,7 +196,7 @@ namespace Exomia.Configuration
             return (T)Convert.ChangeType(_vcPairs[key].Value, type, CultureInfo.InvariantCulture);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual T GetExpanded<T>(string key) where T : IConvertible
         {
             Type type = typeof(T);
@@ -172,7 +204,7 @@ namespace Exomia.Configuration
             return (T)Convert.ChangeType(ExpandValue(_vcPairs[key].Value), type, CultureInfo.InvariantCulture);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual bool TryGet<T>(string key, out T outValue) where T : IConvertible
         {
             outValue = default(T);
@@ -187,7 +219,7 @@ namespace Exomia.Configuration
             catch { return false; }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual bool TryGetExpanded<T>(string key, out T outValue) where T : IConvertible
         {
             outValue = default(T);
@@ -202,7 +234,7 @@ namespace Exomia.Configuration
             catch { return false; }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual bool Remove(string key)
         {
             ValueCommentPair buffer = _vcPairs[key];
@@ -216,25 +248,25 @@ namespace Exomia.Configuration
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public virtual bool TryRemove(string key)
         {
             return !_vcPairs.ContainsKey(key) && Remove(key);
         }
 
-        /// <summary>
-        ///     shows the IConfig info
-        ///     format: [name] ;comment
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"[{_name}]" + (string.IsNullOrEmpty(_comment) ? string.Empty : $" ;{_comment}");
         }
 
         /// <summary>
-        ///     ExpandValue
+        ///     ExpandValue.
         /// </summary>
+        /// <param name="value"> new value. </param>
+        /// <returns>
+        ///     A string.
+        /// </returns>
         protected string ExpandValue(string value)
         {
             Match match;
@@ -254,21 +286,21 @@ namespace Exomia.Configuration
         }
 
         /// <summary>
-        ///     called than IConfig set a key
+        ///     called than IConfig set a key.
         /// </summary>
-        /// <param name="sender">IConfig</param>
-        /// <param name="key">new key</param>
-        /// <param name="value">new value</param>
-        /// <param name="comment">new comment</param>
+        /// <param name="sender">  IConfig. </param>
+        /// <param name="key">     new key. </param>
+        /// <param name="value">   new value. </param>
+        /// <param name="comment"> new comment. </param>
         protected virtual void OnKeySet(IConfig sender, string key, string value, string comment) { }
 
         /// <summary>
-        ///     called than IConfig removes a key
+        ///     called than IConfig removes a key.
         /// </summary>
-        /// <param name="sender">sender</param>
-        /// <param name="key">old key</param>
-        /// <param name="value">old value</param>
-        /// <param name="comment">old comment</param>
+        /// <param name="sender">  sender. </param>
+        /// <param name="key">     old key. </param>
+        /// <param name="value">   old value. </param>
+        /// <param name="comment"> old comment. </param>
         protected virtual void OnKeyRemove(IConfig sender, string key, string value, string comment) { }
     }
 }

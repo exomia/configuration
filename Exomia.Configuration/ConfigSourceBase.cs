@@ -26,33 +26,42 @@ using System.Collections.Generic;
 
 namespace Exomia.Configuration
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     A configuration source base.
+    /// </summary>
+    ///
+    /// ### <inheritdoc/>
     public abstract class ConfigSourceBase : IConfigSource
     {
+
         /// <summary>
-        ///     Dictionary string, IConfig
+        ///     The configs.
         /// </summary>
         protected readonly Dictionary<string, IConfig> _configs;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected ConfigSourceBase()
         {
             _configs = new Dictionary<string, IConfig>();
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Occurs when Reloaded.
+        /// </summary>
         public event ConfigSourceEventHandler Reloaded;
 
-        /// <inheritdoc />
+        /// <summary>
+        ///     Occurs when Saved.
+        /// </summary>
         public event ConfigSourceEventHandler Saved;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IConfig this[string section]
         {
             get { return Get(section); }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IEnumerable<IConfig> GetConfigs()
         {
             foreach (IConfig cfg in _configs.Values)
@@ -61,7 +70,7 @@ namespace Exomia.Configuration
             }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IConfig Add(string section, string comment = "")
         {
             IConfig config = CreateConfig(section, comment);
@@ -69,19 +78,19 @@ namespace Exomia.Configuration
             return config;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public IConfig Get(string section)
         {
             return _configs[section];
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool TryGet(string section, out IConfig config)
         {
             return _configs.TryGetValue(section, out config);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Merge(IConfigSource source)
         {
             foreach (IConfig config in source.GetConfigs())
@@ -97,14 +106,14 @@ namespace Exomia.Configuration
             }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Reload()
         {
             OnReload();
             Reloaded?.Invoke(this);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Save()
         {
             OnSave();
@@ -112,20 +121,22 @@ namespace Exomia.Configuration
         }
 
         /// <summary>
-        ///     creates a new IConfig
+        ///     creates a new IConfig.
         /// </summary>
-        /// <param name="section">section</param>
-        /// <param name="comment">comment</param>
-        /// <returns></returns>
+        /// <param name="section"> section. </param>
+        /// <param name="comment"> comment. </param>
+        /// <returns>
+        ///     The new configuration.
+        /// </returns>
         protected abstract IConfig CreateConfig(string section, string comment);
 
         /// <summary>
-        ///     called than IConfigSource reloaded
+        ///     called than IConfigSource reloaded.
         /// </summary>
         protected virtual void OnReload() { }
 
         /// <summary>
-        ///     called than IConfigSource saved
+        ///     called than IConfigSource saved.
         /// </summary>
         protected virtual void OnSave() { }
     }

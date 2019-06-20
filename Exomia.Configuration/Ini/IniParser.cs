@@ -29,16 +29,29 @@ using System.Text.RegularExpressions;
 
 namespace Exomia.Configuration.Ini
 {
+
     /// <summary>
-    ///     IniParser class
+    ///     An init file parser.
     /// </summary>
     public static class IniParser
     {
+        /// <summary>
+        ///     The escape comment.
+        /// </summary>
         internal const string ESCAPE_COMMENT = ";";
 
+        /// <summary>
+        ///     The first s r.
+        /// </summary>
         private static readonly Regex s_r1;
+        /// <summary>
+        ///     The second s r.
+        /// </summary>
         private static readonly Regex s_r2;
 
+        /// <summary>
+        ///     Initializes static members of the <see cref="IniParser"/> class.
+        /// </summary>
         static IniParser()
         {
             s_r1 = new Regex(
@@ -48,41 +61,46 @@ namespace Exomia.Configuration.Ini
         }
 
         /// <summary>
-        ///     parse a ini file to a IniConfigSource
+        ///     parse a ini file to a IniConfigSource.
         /// </summary>
-        /// <param name="fileName">fileName</param>
-        /// <returns>IniConfigSource</returns>
+        /// <param name="fileName"> fileName. </param>
+        /// <returns>
+        ///     IniConfigSource.
+        /// </returns>
         public static IniConfigSource Parse(string fileName)
         {
             return Parse(new FileStream(fileName, FileMode.Open, FileAccess.Read), null, fileName);
         }
 
         /// <summary>
-        ///     parse a ini file to a IniConfigSource
+        ///     parse a ini file to a IniConfigSource.
         /// </summary>
-        /// <param name="stream">stream</param>
-        /// <param name="fileName">fileName</param>
-        /// <returns>IniConfigSource</returns>
+        /// <param name="stream">   stream. </param>
+        /// <param name="fileName"> (Optional) fileName. </param>
+        /// <returns>
+        ///     IniConfigSource.
+        /// </returns>
         public static IniConfigSource Parse(Stream stream, string fileName = "")
         {
             return Parse(stream, null, fileName);
         }
 
         /// <summary>
-        ///     merge a ini file with an existing IniConfigSource
+        ///     merge a ini file with an existing IniConfigSource.
         /// </summary>
-        /// <param name="fileName">fileName</param>
-        /// <param name="source">source</param>
+        /// <param name="fileName"> fileName. </param>
+        /// <param name="source">   source. </param>
         public static void Merge(string fileName, IniConfigSource source)
         {
             Merge(new FileStream(fileName, FileMode.Open, FileAccess.Read), source);
         }
 
         /// <summary>
-        ///     merge a ini file stream with an existing IniConfigSource
+        ///     merge a ini file stream with an existing IniConfigSource.
         /// </summary>
-        /// <param name="stream">stream</param>
-        /// <param name="source">source</param>
+        /// <param name="stream"> stream. </param>
+        /// <param name="source"> source. </param>
+        /// <exception cref="ArgumentNullException"> Thrown when one or more required arguments are null. </exception>
         public static void Merge(Stream stream, IniConfigSource source)
         {
             if (stream == null) { throw new ArgumentNullException(nameof(stream)); }
@@ -125,6 +143,15 @@ namespace Exomia.Configuration.Ini
             }
         }
 
+        /// <summary>
+        ///     parse a ini file to a IniConfigSource.
+        /// </summary>
+        /// <param name="stream">   stream. </param>
+        /// <param name="source">   (Optional) source. </param>
+        /// <param name="fileName"> (Optional) fileName. </param>
+        /// <returns>
+        ///     IniConfigSource.
+        /// </returns>
         internal static IniConfigSource Parse(Stream stream, IniConfigSource source = null, string fileName = "")
         {
             if (source == null)
@@ -136,6 +163,16 @@ namespace Exomia.Configuration.Ini
             return source;
         }
 
+        /// <summary>
+        ///     Gets a section.
+        /// </summary>
+        /// <param name="line">    The line. </param>
+        /// <param name="section"> [out] The section. </param>
+        /// <param name="comment"> [out] The comment. </param>
+        /// <returns>
+        ///     True if it succeeds, false if it fails.
+        /// </returns>
+        /// <exception cref="Exception"> Thrown when an exception error condition occurs. </exception>
         private static bool GetSection(string line, out string section, out string comment)
         {
             Match match = s_r2.Match(line);
@@ -149,6 +186,16 @@ namespace Exomia.Configuration.Ini
             return true;
         }
 
+        /// <summary>
+        ///     Gets key value comment from line.
+        /// </summary>
+        /// <param name="line">    The line. </param>
+        /// <param name="key">     [out] The key. </param>
+        /// <param name="value">   [out] The value. </param>
+        /// <param name="comment"> [out] The comment. </param>
+        /// <returns>
+        ///     True if it succeeds, false if it fails.
+        /// </returns>
         private static bool GetKeyValueCommentFromLine(string line, out string key, out string value,
             out string comment)
         {

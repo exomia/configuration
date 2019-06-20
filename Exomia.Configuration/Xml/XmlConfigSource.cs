@@ -29,20 +29,38 @@ using System.Xml;
 
 namespace Exomia.Configuration.Xml
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     An XML configuration source. This class cannot be inherited.
+    /// </summary>
     public sealed class XmlConfigSource : ConfigSourceBase
     {
+        /// <summary>
+        ///     Filename of the save file.
+        /// </summary>
         private string _saveFileName = string.Empty;
 
+
         /// <summary>
-        ///     SaveFileName
+        ///     Gets or sets the filename of the save file.
         /// </summary>
+        /// <value>
+        ///     The filename of the save file.
+        /// </value>
         public string SaveFileName
         {
             get { return _saveFileName; }
             set { _saveFileName = value; }
         }
 
+        /// <summary>
+        ///     Creates section node.
+        /// </summary>
+        /// <param name="doc">     The document. </param>
+        /// <param name="section"> The section. </param>
+        /// <param name="comment"> (Optional) The comment. </param>
+        /// <returns>
+        ///     The new section node.
+        /// </returns>
         private static XmlNode CreateSectionNode(XmlDocument doc, string section, string comment = "")
         {
             XmlNode node = doc.CreateElement("section");
@@ -61,12 +79,23 @@ namespace Exomia.Configuration.Xml
             return node;
         }
 
+        /// <summary>
+        ///     Creates kvc node.
+        /// </summary>
+        /// <param name="doc">     The document. </param>
+        /// <param name="key">     The key. </param>
+        /// <param name="value">   The value. </param>
+        /// <param name="comment"> (Optional) The comment. </param>
+        /// <returns>
+        ///     The new kvc node.
+        /// </returns>
         private static XmlNode CreateKvcNode(XmlDocument doc, string key, string value, string comment = "")
         {
             XmlNode node = doc.CreateElement("item");
 
             XmlAttribute keyAttr = doc.CreateAttribute("key");
             keyAttr.Value = key;
+            // ReSharper disable once PossibleNullReferenceException
             node.Attributes.Append(keyAttr);
 
             XmlAttribute valueAttr = doc.CreateAttribute("value");
@@ -82,13 +111,13 @@ namespace Exomia.Configuration.Xml
             return node;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override IConfig CreateConfig(string section, string comment)
         {
             return new XmlConfig(this, section, comment);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override void OnReload()
         {
             if (string.IsNullOrEmpty(_saveFileName))
@@ -99,7 +128,7 @@ namespace Exomia.Configuration.Xml
             XmlParser.Merge(new FileStream(_saveFileName, FileMode.Open, FileAccess.Read), this);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override void OnSave()
         {
             if (string.IsNullOrEmpty(_saveFileName))
@@ -111,6 +140,7 @@ namespace Exomia.Configuration.Xml
             XmlNode root = doc.CreateElement("config");
             doc.AppendChild(root);
 
+            // ReSharper disable once PossibleInvalidCastExceptionInForeachLoop
             foreach (XmlConfig cfg in _configs.Values)
             {
                 if (cfg.Infos != null)
